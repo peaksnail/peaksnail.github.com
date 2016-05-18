@@ -5,7 +5,6 @@ description: "introduce pinpoint apm"
 category: [pinpoint, apm]
 tags: [pinpoint, apm]
 ---
-{% include JB/setup %}
 
 ### APM 
 
