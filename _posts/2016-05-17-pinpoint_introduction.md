@@ -2,8 +2,8 @@
 layout: post
 title: "Pinpoint Introduction"
 description: "introduce pinpoint apm"
-category: [pinpoint, apm]
-tags: [pinpoint, apm]
+category: apm
+#tags: [pinpoint, apm]
 ---
 
 ### APM 
