@@ -11,12 +11,12 @@ category: apm
 
 今天说下agent监控元数据的序列化
 
-#### 数据结构文件的生成
+##### 数据结构文件的生成
 
 pinpoint官方提供了thrift的数据结构源文件,使用对应的语言和平台编译
 下即可得到相应的数据结构文件.
 
-####数据结构及属性
+##### 数据结构及属性
 
 首先介绍下 transaction span spanEvent annotationKey等重要数据结构的意义
 
@@ -33,7 +33,7 @@ pinpoint官方提供了thrift的数据结构源文件,使用对应的语言和�
 综上，可以理解到一次完整请求为一个transaction，开发者需要做的是 组合使用spanParentId关联起span，
 然后在span中监控各个函数，即可完成一个完整的transaction
 
-####序列化
+##### 序列化
 
 有了上述的基础数据结构的理解，现在说下 数据的序列化
 
