@@ -55,4 +55,4 @@ pinpoint官方提供了thrift的数据结构源文件,使用对应的语言和�
 
 基于上述理解,目前实现了pinpoint nodejs agent,欢迎使用和提出相关建议,谢谢
 
-* [github](https://github.com/peaksnail/pinpoint-node-agent)
+* [pinpoint nodejs agent](https://github.com/peaksnail/pinpoint-node-agent)
