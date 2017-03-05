@@ -44,7 +44,6 @@ Pinpoint collector模块使用netty异步框架来实现数据的接收解析和
 ##### decode 
 
 先看下collecotr对数据的解码
-
     ``` java
     protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
             if (buffer.readableBytes() < 2) {
