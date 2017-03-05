@@ -45,61 +45,61 @@ Pinpoint collector模块使用netty异步框架来实现数据的接收解析和
 
 先看下collecotr对数据的解码
 
-``` java
-protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
-        if (buffer.readableBytes() < 2) {
+    ``` java
+    protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+            if (buffer.readableBytes() < 2) {
+                return null;
+            }
+            buffer.markReaderIndex();
+            final short packetType = buffer.readShort();
+            switch (packetType) {
+                case PacketType.APPLICATION_SEND:
+                    return readSend(packetType, buffer);
+                case PacketType.APPLICATION_REQUEST:
+                    return readRequest(packetType, buffer);
+                case PacketType.APPLICATION_RESPONSE:
+                    return readResponse(packetType, buffer);
+                case PacketType.APPLICATION_STREAM_CREATE:
+                    return readStreamCreate(packetType, buffer);
+                case PacketType.APPLICATION_STREAM_CLOSE:
+                    return readStreamClose(packetType, buffer);
+                case PacketType.APPLICATION_STREAM_CREATE_SUCCESS:
+                    return readStreamCreateSuccess(packetType, buffer);
+                case PacketType.APPLICATION_STREAM_CREATE_FAIL:
+                    return readStreamCreateFail(packetType, buffer);
+                case PacketType.APPLICATION_STREAM_RESPONSE:
+                    return readStreamData(packetType, buffer);
+                case PacketType.APPLICATION_STREAM_PING:
+                    return readStreamPing(packetType, buffer);
+                case PacketType.APPLICATION_STREAM_PONG:
+                    return readStreamPong(packetType, buffer);
+                case PacketType.CONTROL_CLIENT_CLOSE:
+                    return readControlClientClose(packetType, buffer);
+                case PacketType.CONTROL_SERVER_CLOSE:
+                    return readControlServerClose(packetType, buffer);
+                case PacketType.CONTROL_PING:
+                    PingPacket pingPacket = (PingPacket) readPing(packetType, buffer);
+                    if (pingPacket == PingPacket.PING_PACKET) {
+                        sendPong(channel);
+                        // just drop ping
+                        return null;
+                    }
+                    return pingPacket;
+                case PacketType.CONTROL_PONG:
+                    logger.debug("receive pong. {}", channel);
+                    readPong(packetType, buffer);
+                    // just also drop pong.
+                    return null;
+                case PacketType.CONTROL_HANDSHAKE:
+                    return readEnableWorker(packetType, buffer);
+                case PacketType.CONTROL_HANDSHAKE_RESPONSE:
+                    return readEnableWorkerConfirm(packetType, buffer);
+            }
+            logger.error("invalid packetType received. packetType:{}, channel:{}", packetType, channel);
+            channel.close();
             return null;
         }
-        buffer.markReaderIndex();
-        final short packetType = buffer.readShort();
-        switch (packetType) {
-            case PacketType.APPLICATION_SEND:
-                return readSend(packetType, buffer);
-            case PacketType.APPLICATION_REQUEST:
-                return readRequest(packetType, buffer);
-            case PacketType.APPLICATION_RESPONSE:
-                return readResponse(packetType, buffer);
-            case PacketType.APPLICATION_STREAM_CREATE:
-                return readStreamCreate(packetType, buffer);
-            case PacketType.APPLICATION_STREAM_CLOSE:
-                return readStreamClose(packetType, buffer);
-            case PacketType.APPLICATION_STREAM_CREATE_SUCCESS:
-                return readStreamCreateSuccess(packetType, buffer);
-            case PacketType.APPLICATION_STREAM_CREATE_FAIL:
-                return readStreamCreateFail(packetType, buffer);
-            case PacketType.APPLICATION_STREAM_RESPONSE:
-                return readStreamData(packetType, buffer);
-            case PacketType.APPLICATION_STREAM_PING:
-                return readStreamPing(packetType, buffer);
-            case PacketType.APPLICATION_STREAM_PONG:
-                return readStreamPong(packetType, buffer);
-            case PacketType.CONTROL_CLIENT_CLOSE:
-                return readControlClientClose(packetType, buffer);
-            case PacketType.CONTROL_SERVER_CLOSE:
-                return readControlServerClose(packetType, buffer);
-            case PacketType.CONTROL_PING:
-                PingPacket pingPacket = (PingPacket) readPing(packetType, buffer);
-                if (pingPacket == PingPacket.PING_PACKET) {
-                    sendPong(channel);
-                    // just drop ping
-                    return null;
-                }
-                return pingPacket;
-            case PacketType.CONTROL_PONG:
-                logger.debug("receive pong. {}", channel);
-                readPong(packetType, buffer);
-                // just also drop pong.
-                return null;
-            case PacketType.CONTROL_HANDSHAKE:
-                return readEnableWorker(packetType, buffer);
-            case PacketType.CONTROL_HANDSHAKE_RESPONSE:
-                return readEnableWorkerConfirm(packetType, buffer);
-        }
-        logger.error("invalid packetType received. packetType:{}, channel:{}", packetType, channel);
-        channel.close();
-        return null;
-    }
-```
+    ```
 
 * 可以看到collector端收到消息后，读取buffer的前两个bytes(16bits,short类型) 来判断是什么类型的数据，根据相应的
 类型,读取数据，返回对应的数据对象。这里以 PacketType.APPLICATION_SEND 来说明下后续的处理
