@@ -28,7 +28,8 @@ category: apm
 
 #### collector
 
-这里我们先看下collector是如何接收和处理agent的数据包的.
+这里我们先看下collector是如何接收和处理agent的数据包的.即 TCP协议的一些处理.
+UDP协议数据包格式和处理方式会有点不同，下文会分析到
 
 Pinpoint collector模块使用netty异步框架来实现数据的接收解析和处理,所以这里需要去理解netty做了些什么来解析接收到的
 数据和进一步的数据处理
@@ -198,5 +199,7 @@ Header 4bytes，分别为signature(固定值 1byes) version(固定值 1bytes) ty
 整个过程 实际就是 选择发送的对象，通过thrift的压缩协议生成binary数据，
 然后根据不同的对象设置相应的头部信息，最后设置数据包的类型，向collector汇报
 
+<src img='../pictures/tcp_serialize.png' />
 
---下一篇将会说下 Trace信息的序列化和反序列化 及其发送机制
+
+--下一篇将会说下 Trace信息的序列化和反序列化(UDP协议) 及其发送机制
