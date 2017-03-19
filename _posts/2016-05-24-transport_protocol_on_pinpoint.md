@@ -199,6 +199,7 @@ Header 4bytes，分别为signature(固定值 1byes) version(固定值 1bytes) ty
 整个过程 实际就是 选择发送的对象，通过thrift的压缩协议生成binary数据，
 然后根据不同的对象设置相应的头部信息，最后设置数据包的类型，向collector汇报
 
+
 [TCP协议数据处理流程](https://raw.githubusercontent.com/peaksnail/peaksnail.github.com/master/_pictures/tcp_serialize.png)
 
 
