@@ -1,15 +1,15 @@
 ---
 layout: post
-title: "Metadata serialization"
-description: "metadata serialization"
+title: "udp in pinpoint"
+description: "udp and serialization"
 category: apm
 #tags: [pinpoint, apm]
 ---
 {% include JB/setup %}
 
-### Transport Protocol
+### UDP Protocol
 
-今天说下agent监控元数据的序列化
+今天说下agent监控元数据传输所使用的的UDP协议和其序列化
 
 ##### 数据结构文件的生成
 
@@ -37,15 +37,20 @@ pinpoint官方提供了thrift的数据结构源文件,使用对应的语言和�
 
 有了上述的基础数据结构的理解，现在说下 数据的序列化
 
-* TCP 协议 
+* TCP 协议 [上一篇](http://peaksnail.github.io/apm/2016/05/24/transport_protocol_on_pinpoint)
     * TAgent TApiInfo 以及agent汇报的信息采用tcp协议发送
     * 发送的数据格式 | type | requestId | length | buffer |
     其中buffer是要发送的数据
 
 * UDP 协议 
     * TSpan 等跟踪数据使用udp协议发送
-    * 发送的数据格式 | signature | version | type | length | buffer |
+    * 发送的数据格式 | signature | version | type | buffer |
     其中buffer是要发送的数据
+
+    具体可以从[源码](https://github.com/naver/pinpoint/blob/master/collector/src/main/java/com/navercorp/pinpoint/collector/receiver/udp/BaseUDPHandlerFactory.java) 开始阅读，详细的说明了从获取数据到序列化的过程,主要是通过thrift压缩协议生成具体数据后，修改头部信息来标识其具体的数据结构来实现
+
+
+[UDP协议数据处理流程](https://raw.githubusercontent.com/peaksnail/peaksnail.github.com/master/_pictures/udp_serialize.png)
 
 * 压缩协议
     上述的数据发送格式中的buffer，是将采集到的数据 经过thrift的压缩协议(TCompact protocol)
