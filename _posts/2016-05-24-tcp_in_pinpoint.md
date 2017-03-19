@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "How to transport data on Pinpoint"
-description: "transport protocol and serialize"
+title: "tcp in pinpoint"
+description: "tcp transport protocol and serialize"
 category: apm
 #tags: [pinpoint, apm]
 ---
