@@ -37,7 +37,7 @@ pinpoint官方提供了thrift的数据结构源文件,使用对应的语言和�
 
 有了上述的基础数据结构的理解，现在说下 数据的序列化
 
-* TCP 协议 [上一篇](http://peaksnail.github.io/apm/2016/05/24/transport_protocol_on_pinpoint)
+* TCP 协议 [上一篇](http://peaksnail.github.io/apm/2016/05/24/tcp_in_pinpoint)
     * TAgent TApiInfo 以及agent汇报的信息采用tcp协议发送
     * 发送的数据格式 | type | requestId | length | buffer |
     其中buffer是要发送的数据
