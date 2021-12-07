@@ -2,8 +2,8 @@
 layout: post
 title: "datax 状态管理器的实现"
 description: "datax 基于redis的状态管理器"
-category: datax redis
-#tags: [datax, redis, data]
+category: datax
+#tags: [datax, data]
 ---
 {% include JB/setup %}
 
